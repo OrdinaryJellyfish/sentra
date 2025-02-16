@@ -26,9 +26,9 @@
             "title": "Sentra",
             "category": "",
             "icon": {
-                "name": "",
-                "color": "",
-                "backgroundColor": ""
+                "name": "fas fa-shield-alt",
+                "color": "#FFFFFF",
+                "backgroundColor": "#4B0082"
             }
         },
         "flarum-cli": {
