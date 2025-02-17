@@ -1,13 +1,16 @@
 {
     "name": "ordinaryjellyfish/sentra",
-    "description": "Intelligent content moderation for Flarum, built with Azure AI.",
+    "description": "Intelligent community management and moderation for Flarum.",
     "keywords": [
         "flarum"
     ],
     "type": "flarum-extension",
-    "license": "MIT",
+    "license": "LGPL-3.0-or-later",
     "require": {
-        "flarum/core": "^1.0"
+        "flarum/core": "^1.0",
+        "flarum/approval": "^1.0",
+        "flarum/flags": "^1.0",
+        "guzzlehttp/guzzle": "^7.9"
     },
     "authors": [
         {
@@ -24,7 +27,7 @@
     "extra": {
         "flarum-extension": {
             "title": "Sentra",
-            "category": "",
+            "category": "moderation",
             "icon": {
                 "name": "fas fa-shield-alt",
                 "color": "#FFFFFF",
@@ -37,7 +40,7 @@
                 "forum": true,
                 "js": true,
                 "jsCommon": false,
-                "css": false,
+                "css": true,
                 "locale": true,
                 "gitConf": true,
                 "githubActions": true,
@@ -52,7 +55,7 @@
             }
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "autoload-dev": {
         "psr-4": {

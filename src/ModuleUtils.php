@@ -1,3 +1,5 @@
+<?php
+
 /*
  * Sentra - Intelligent community management and moderation for Flarum.
  * Copyright (C) 2025  Tristian Kelly <me@ordinaryjellyfish.xyz>
@@ -16,20 +18,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import app from 'flarum/forum/app';
-import { override } from 'flarum/common/extend';
-import Post from 'flarum/forum/components/Post';
+namespace OrdinaryJellyfish\Sentra;
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  override(Post.prototype, 'flagReason', function (original, flag) {
-    if (flag.type() === 'sentra') {
-      const reason = flag.reason();
+use Flarum\Flags\Flag;
+use Flarum\Post\Post;
 
-      return app.translator.trans('ordinaryjellyfish-sentra.forum.flag_reason', {
-        reason,
-      });
-    }
+class ModuleUtils
+{
+  public function unapproveAndFlag(Post $post, string $type)
+  {
+    $post->is_approved = false;
 
-    return original(flag);
-  });
-});
+    $post->afterSave(function (Post $post) use ($type) {
+      $flags = $post->flags();
+
+      if ($flags->where('type', 'sentra')->doesntExist()) {
+        $flag = new Flag();
+        $flag->post_id = $post->id;
+        $flag->type = 'sentra';
+        $flag->reason = $type;
+        $flag->created_at = time();
+        $flag->save();
+      }
+    });
+  }
+}

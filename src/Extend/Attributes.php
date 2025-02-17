@@ -18,20 +18,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OrdinaryJellyfish\Sentra;
+namespace OrdinaryJellyfish\Sentra\Extend;
 
-use Flarum\Extend;
-use Flarum\Post\Event\Saving;
+use Flarum\Extend\ExtenderInterface;
+use Flarum\Extension\Extension;
+use Illuminate\Contracts\Container\Container;
 
-return [
-    (new Extend\ServiceProvider())
-        ->register(SentraServiceProvider::class),
-    (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js'),
-    (new Extend\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js')
-        ->css(__DIR__ . '/less/admin.less'),
-    new Extend\Locales(__DIR__ . '/locale'),
-    (new Extend\Event())
-        ->listen(Saving::class, Listeners\RunPostAnalysisModules::class),
-];
+class Attributes implements ExtenderInterface
+{
+  private string $moduleType;
+  private array $attributes = [];
+
+  public function __construct(string $moduleType)
+  {
+    $this->moduleType = $moduleType;
+  }
+
+  public function add($attribute)
+  {
+    $this->attributes[] = $attribute;
+    return $this;
+  }
+
+  function extend(Container $container, Extension $extension = null)
+  {
+    $container->extend('ordinaryjellyfish-sentra.modules.' . $this->moduleType . '.attributes', function ($existingAttributes) {
+      foreach ($this->attributes as $attribute) {
+        $existingAttributes[] = $attribute;
+      }
+
+      return $existingAttributes;
+    });
+  }
+}

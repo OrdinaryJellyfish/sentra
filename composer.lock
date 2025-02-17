@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2173b8b50c611f4fae48f7cc61d8c2a",
+    "content-hash": "64badb59704a3bd8b78c4fd5499a2edb",
     "packages": [
         {
             "name": "axy/backtrace",
@@ -1131,6 +1131,86 @@
             "time": "2025-01-25T12:00:00+00:00"
         },
         {
+            "name": "flarum/approval",
+            "version": "v1.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/flarum/approval.git",
+                "reference": "61a76252b455d5dcad5535e9fef4a5445643d59a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/flarum/approval/zipball/61a76252b455d5dcad5535e9fef4a5445643d59a",
+                "reference": "61a76252b455d5dcad5535e9fef4a5445643d59a",
+                "shasum": ""
+            },
+            "require": {
+                "flarum/core": "^1.8",
+                "flarum/flags": "^1.7"
+            },
+            "require-dev": {
+                "flarum/testing": "^1.0.0"
+            },
+            "type": "flarum-extension",
+            "extra": {
+                "flarum-cli": {
+                    "modules": {
+                        "js": true,
+                        "css": true,
+                        "admin": true,
+                        "forum": true,
+                        "gitConf": true,
+                        "styleci": true,
+                        "jsCommon": false,
+                        "prettier": true,
+                        "typescript": false,
+                        "bundlewatch": false,
+                        "editorConfig": true,
+                        "githubActions": true,
+                        "backendTesting": true
+                    }
+                },
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                },
+                "flarum-extension": {
+                    "icon": {
+                        "name": "fas fa-check",
+                        "color": "#3F8A32",
+                        "backgroundColor": "#ABDC88"
+                    },
+                    "title": "Approval",
+                    "category": "feature"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Flarum\\Approval\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Make discussions and posts require moderator approval.",
+            "homepage": "https://flarum.org",
+            "keywords": [
+                "moderation"
+            ],
+            "support": {
+                "forum": "https://discuss.flarum.org",
+                "issues": "https://github.com/flarum/framework/issues",
+                "source": "https://github.com/flarum/approval"
+            },
+            "funding": [
+                {
+                    "url": "https://flarum.org/donate/",
+                    "type": "website"
+                }
+            ],
+            "time": "2024-10-02T11:13:26+00:00"
+        },
+        {
             "name": "flarum/core",
             "version": "v1.8.9",
             "source": {
@@ -1275,6 +1355,87 @@
                 }
             ],
             "time": "2024-11-20T13:51:54+00:00"
+        },
+        {
+            "name": "flarum/flags",
+            "version": "v1.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/flarum/flags.git",
+                "reference": "ba857db6f0e8c8b55cbab1ca0b7bc30215e92447"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/flarum/flags/zipball/ba857db6f0e8c8b55cbab1ca0b7bc30215e92447",
+                "reference": "ba857db6f0e8c8b55cbab1ca0b7bc30215e92447",
+                "shasum": ""
+            },
+            "require": {
+                "flarum/core": "^1.8.6"
+            },
+            "require-dev": {
+                "flarum/core": "*@dev",
+                "flarum/tags": "*@dev",
+                "flarum/testing": "^1.0.0"
+            },
+            "type": "flarum-extension",
+            "extra": {
+                "flarum-cli": {
+                    "modules": {
+                        "js": true,
+                        "css": true,
+                        "admin": true,
+                        "forum": true,
+                        "gitConf": true,
+                        "styleci": true,
+                        "jsCommon": false,
+                        "prettier": true,
+                        "typescript": true,
+                        "bundlewatch": false,
+                        "editorConfig": true,
+                        "githubActions": true,
+                        "backendTesting": true
+                    }
+                },
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                },
+                "flarum-extension": {
+                    "icon": {
+                        "name": "fas fa-flag",
+                        "color": "#fff",
+                        "backgroundColor": "#D659B5"
+                    },
+                    "title": "Flags",
+                    "category": "feature"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Flarum\\Flags\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Allow users to flag posts for moderator review.",
+            "homepage": "https://flarum.org",
+            "keywords": [
+                "moderation"
+            ],
+            "support": {
+                "forum": "https://discuss.flarum.org",
+                "issues": "https://github.com/flarum/framework/issues",
+                "source": "https://github.com/flarum/flags"
+            },
+            "funding": [
+                {
+                    "url": "https://flarum.org/donate/",
+                    "type": "website"
+                }
+            ],
+            "time": "2024-10-26T22:18:59+00:00"
         },
         {
             "name": "franzl/whoops-middleware",

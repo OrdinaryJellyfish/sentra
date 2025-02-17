@@ -1,3 +1,5 @@
+<?php
+
 /*
  * Sentra - Intelligent community management and moderation for Flarum.
  * Copyright (C) 2025  Tristian Kelly <me@ordinaryjellyfish.xyz>
@@ -16,20 +18,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import app from 'flarum/forum/app';
-import { override } from 'flarum/common/extend';
-import Post from 'flarum/forum/components/Post';
+namespace OrdinaryJellyfish\Sentra\Modules;
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  override(Post.prototype, 'flagReason', function (original, flag) {
-    if (flag.type() === 'sentra') {
-      const reason = flag.reason();
+use Flarum\Post\Post;
+use Flarum\User\User;
 
-      return app.translator.trans('ordinaryjellyfish-sentra.forum.flag_reason', {
-        reason,
-      });
-    }
-
-    return original(flag);
-  });
-});
+interface ModuleInterface
+{
+  public function getKey(): string;
+  public function getDependencies(): array;
+  public function handle(array $data, Post $post, User $user);
+}

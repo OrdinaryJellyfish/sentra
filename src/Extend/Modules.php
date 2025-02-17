@@ -1,3 +1,5 @@
+<?php
+
 /*
  * Sentra - Intelligent community management and moderation for Flarum.
  * Copyright (C) 2025  Tristian Kelly <me@ordinaryjellyfish.xyz>
@@ -16,20 +18,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import app from 'flarum/forum/app';
-import { override } from 'flarum/common/extend';
-import Post from 'flarum/forum/components/Post';
+namespace OrdinaryJellyfish\Sentra\Extend;
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  override(Post.prototype, 'flagReason', function (original, flag) {
-    if (flag.type() === 'sentra') {
-      const reason = flag.reason();
+use Flarum\Extend\ExtenderInterface;
+use Flarum\Extension\Extension;
+use Illuminate\Contracts\Container\Container;
 
-      return app.translator.trans('ordinaryjellyfish-sentra.forum.flag_reason', {
-        reason,
-      });
-    }
+class Modules implements ExtenderInterface
+{
+  private string $moduleType;
+  private array $modules = [];
 
-    return original(flag);
-  });
-});
+  public function __construct(string $moduleType)
+  {
+    $this->moduleType = $moduleType;
+  }
+
+  public function add($callback)
+  {
+    $this->modules[] = $callback;
+    return $this;
+  }
+
+  function extend(Container $container, Extension $extension = null)
+  {
+    $container->extend('ordinaryjellyfish-sentra.modules.' . $this->moduleType, function ($existingModules) {
+      foreach ($this->modules as $module) {
+        $existingModules[] = $module;
+      }
+
+      return $existingModules;
+    });
+  }
+}

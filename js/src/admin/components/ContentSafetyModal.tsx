@@ -16,20 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import app from 'flarum/forum/app';
-import { override } from 'flarum/common/extend';
-import Post from 'flarum/forum/components/Post';
+import app from "flarum/admin/app";
+import ServiceModal from "./ServiceModal";
+import Switch from "flarum/common/components/Switch";
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  override(Post.prototype, 'flagReason', function (original, flag) {
-    if (flag.type() === 'sentra') {
-      const reason = flag.reason();
+export default class ContentSafetyModal extends ServiceModal {
+  key = 'content_safety';
 
-      return app.translator.trans('ordinaryjellyfish-sentra.forum.flag_reason', {
-        reason,
-      });
-    }
+  form() {
+    const imageSetting = `ordinaryjellyfish-sentra.services.${this.key}.analyze_images`;
+    const imageValue = this.setting(imageSetting)();
 
-    return original(flag);
-  });
-});
+    return [
+      <Switch state={!!imageValue && imageValue !== '0'} onchange={this.settings[imageSetting]}>
+        {app.translator.trans('ordinaryjellyfish-sentra.admin.services.content_safety_settings.analyze_images')}
+      </Switch>,
+      this.apiKeyField(),
+      this.endpointField()
+    ]
+  }
+}
