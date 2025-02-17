@@ -7,6 +7,8 @@ ordinaryjellyfish-sentra:
     enable: Enable
     permissions:
       bypass: Bypass Sentra
+      create_warnings: Create Warnings
+      view_warnings: View Warnings
     services:
       heading: Services
       content_safety: Azure AI Content Safety
@@ -41,3 +43,5 @@ ordinaryjellyfish-sentra:
   forum:
     flag_reason: Sentra flagged this post for {reason}
     flag_detail: Post met criteria for {categories} with respective severities of {severities}
+    warn:
+      reason_missing: Please define a reason for the warning.

@@ -25,9 +25,25 @@ app.initializers.add('ordinaryjellyfish/sentra', () => {
     .registerPage(SettingsPage)
     .registerPermission(
       {
-        icon: 'fas fa-door-open',
+        icon: 'fas fa-shield-alt',
         label: app.translator.trans('ordinaryjellyfish-sentra.admin.permissions.bypass'),
         permission: 'ordinaryjellyfish-sentra.bypass',
+      },
+      'moderate'
+    )
+    .registerPermission(
+      {
+        icon: 'fas fa-shield-alt',
+        label: app.translator.trans('ordinaryjellyfish-sentra.admin.permissions.create_warnings'),
+        permission: 'ordinaryjellyfish-sentra.create_warnings',
+      },
+      'moderate'
+    )
+    .registerPermission(
+      {
+        icon: 'fas fa-shield-alt',
+        label: app.translator.trans('ordinaryjellyfish-sentra.admin.permissions.view_warnings'),
+        permission: 'ordinaryjellyfish-sentra.view_warnings',
       },
       'moderate'
     );

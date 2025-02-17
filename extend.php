@@ -22,16 +22,35 @@ namespace OrdinaryJellyfish\Sentra;
 
 use Flarum\Extend;
 use Flarum\Post\Event\Saving;
+use Flarum\User\User;
+use Flarum\Api\Serializer\PostSerializer;
+use Flarum\Api\Serializer\ForumSerializer;
 
 return [
     (new Extend\ServiceProvider())
         ->register(SentraServiceProvider::class),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->js(__DIR__ . '/js/dist/forum.js'),
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js')
-        ->css(__DIR__.'/less/admin.less'),
-    new Extend\Locales(__DIR__.'/locale'),
+        ->js(__DIR__ . '/js/dist/admin.js')
+        ->css(__DIR__ . '/less/admin.less'),
+    new Extend\Locales(__DIR__ . '/locale'),
+    (new Extend\Model(User::class))
+        ->hasMany('warnings', Warning::class, 'post_id'),
+    (new Extend\ApiSerializer(PostSerializer::class))
+        ->attribute('canWarn', function (PostSerializer $serializer, $model) {
+            return $serializer->getActor()->hasPermission('ordinaryjellyfish-sentra.create_warnings');
+        }),
+    (new Extend\ApiSerializer(ForumSerializer::class))
+        ->attribute('canViewWarnings', function (ForumSerializer $serializer) {
+            return $serializer->getActor()->hasPermission('ordinaryjellyfish-sentra.view_warnings');
+        }),
+    (new Extend\ModelVisibility(Warning::class))
+        ->scope(Access\ScopeWarningVisibility::class),
+    (new Extend\Routes('api'))
+        ->get('/users/{id}/warnings', 'warnings.index', Api\Controller\ListWarningsController::class)
+        ->post('/warnings', 'warnings.create', Api\Controller\CreateWarningController::class)
+        ->delete('/warnings/{id}', 'warnings.delete', Api\Controller\DeleteWarningController::class),
     (new Extend\Event())
         ->listen(Saving::class, Listeners\RunPostAnalysisModules::class),
 ];
