@@ -29,5 +29,5 @@ php flarum cache:clear
 
 ## Screenshots
 
-![Flag](https://raw.githubusercontent.com/OrdinaryJellyfish/sentra/main/screenshots/flag.png)
-![Settings](https://raw.githubusercontent.com/OrdinaryJellyfish/sentra/main/screenshots/settings.png)
+![Flag](https://raw.githubusercontent.com/OrdinaryJellyfish/sentra/refs/heads/main/screenshots/flag.png)
+![Settings](https://raw.githubusercontent.com/OrdinaryJellyfish/sentra/refs/heads/main/screenshots/settings.png)
