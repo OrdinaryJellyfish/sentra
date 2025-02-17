@@ -25,7 +25,7 @@ php flarum cache:clear
 - [Documentation](https://sentra.ordinaryjellyfish.xyz)
 - [Packagist](https://packagist.org/packages/ordinaryjellyfish/sentra)
 - [GitHub](https://github.com/OrdinaryJellyfish/sentra)
-- [Discuss](https://discuss.flarum.org/d/PUT_DISCUSS_SLUG_HERE)
+- [Discuss](https://discuss.flarum.org/d/37032-sentra-extensible-community-management)
 
 ## Screenshots
 
