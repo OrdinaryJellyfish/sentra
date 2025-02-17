@@ -1,8 +1,8 @@
 {
-    "files": [
-        {
-            "path": "./dist/*.js"
-        }
-    ],
-    "defaultCompression": "gzip"
+  "files": [
+    {
+      "path": "./dist/*.js"
+    }
+  ],
+  "defaultCompression": "gzip"
 }

@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import app from "flarum/admin/app";
-import ServiceModal from "./ServiceModal";
-import Switch from "flarum/common/components/Switch";
+import app from 'flarum/admin/app';
+import ServiceModal from './ServiceModal';
+import Switch from 'flarum/common/components/Switch';
 
 export default class ContentSafetyModal extends ServiceModal {
   key = 'content_safety';
@@ -32,7 +32,7 @@ export default class ContentSafetyModal extends ServiceModal {
         {app.translator.trans('ordinaryjellyfish-sentra.admin.services.content_safety_settings.analyze_images')}
       </Switch>,
       this.apiKeyField(),
-      this.endpointField()
-    ]
+      this.endpointField(),
+    ];
   }
 }
