@@ -20,65 +20,64 @@
 
 namespace OrdinaryJellyfish\Sentra\Attributes;
 
-use OrdinaryJellyfish\Sentra\Services;
 use Flarum\Post\Post;
-use Flarum\Post\Event\Saving;
 use Flarum\Settings\SettingsRepositoryInterface;
+use OrdinaryJellyfish\Sentra\Services;
 use s9e\TextFormatter\Utils\ParsedDOM;
 
 class HarmCategories
 {
-  private SettingsRepositoryInterface $settings;
+    private SettingsRepositoryInterface $settings;
 
-  public function __construct(SettingsRepositoryInterface $settings)
-  {
-    $this->settings = $settings;
-  }
-
-  public function handle(Post $post)
-  {
-    $contentSafety = new Services\AzureAIContentSafety();
-    $dom = ParsedDOM::loadXML($post->parsed_content);
-    $analyzedText = $contentSafety->analyzeText($post->content);
-
-    $mergedCategories = $this->mergeCategoriesAnalysis($analyzedText->categoriesAnalysis);
-
-    if ($this->settings->get('ordinaryjellyfish-sentra.services.content_safety.analyze_images')) {
-      foreach ($dom->query('//IMG[@src]') as $img) {
-        $image = $img->getAttribute('src');
-        $response = $contentSafety->analyzeImageFromUrl($image);
-        $mergedCategories = $this->mergeCategoriesAnalysis($response->categoriesAnalysis, $mergedCategories);
-      }
+    public function __construct(SettingsRepositoryInterface $settings)
+    {
+        $this->settings = $settings;
     }
 
-    return [
-      'harmCategories' => $mergedCategories,
-    ];
-  }
+    public function handle(Post $post)
+    {
+        $contentSafety = new Services\AzureAIContentSafety();
+        $dom = ParsedDOM::loadXML($post->parsed_content);
+        $analyzedText = $contentSafety->analyzeText($post->content);
 
-  private function mergeCategoriesAnalysis(array $newAnalysis, array $existingAnalysis = []): array
-  {
-    $categories = ['Hate', 'Sexual', 'SelfHarm', 'Violence'];
+        $mergedCategories = $this->mergeCategoriesAnalysis($analyzedText->categoriesAnalysis);
 
-    // Initialize existingAnalysis if it's empty
-    if (empty($existingAnalysis)) {
-      foreach ($categories as $category) {
-        $existingAnalysis[$category] = 0;
-      }
+        if ($this->settings->get('ordinaryjellyfish-sentra.services.content_safety.analyze_images')) {
+            foreach ($dom->query('//IMG[@src]') as $img) {
+                $image = $img->getAttribute('src');
+                $response = $contentSafety->analyzeImageFromUrl($image);
+                $mergedCategories = $this->mergeCategoriesAnalysis($response->categoriesAnalysis, $mergedCategories);
+            }
+        }
+
+        return [
+            'harmCategories' => $mergedCategories,
+        ];
     }
 
-    // Merge the new analysis with the existing analysis
-    foreach ($newAnalysis as $analysis) {
-      $category = $analysis->category;
-      $severity = $analysis->severity;
+    private function mergeCategoriesAnalysis(array $newAnalysis, array $existingAnalysis = []): array
+    {
+        $categories = ['Hate', 'Sexual', 'SelfHarm', 'Violence'];
 
-      if (isset($existingAnalysis[$category])) {
-        $existingAnalysis[$category] = max($existingAnalysis[$category], $severity);
-      } else {
-        $existingAnalysis[$category] = $severity;
-      }
+        // Initialize existingAnalysis if it's empty
+        if (empty($existingAnalysis)) {
+            foreach ($categories as $category) {
+                $existingAnalysis[$category] = 0;
+            }
+        }
+
+        // Merge the new analysis with the existing analysis
+        foreach ($newAnalysis as $analysis) {
+            $category = $analysis->category;
+            $severity = $analysis->severity;
+
+            if (isset($existingAnalysis[$category])) {
+                $existingAnalysis[$category] = max($existingAnalysis[$category], $severity);
+            } else {
+                $existingAnalysis[$category] = $severity;
+            }
+        }
+
+        return $existingAnalysis;
     }
-
-    return $existingAnalysis;
-  }
 }

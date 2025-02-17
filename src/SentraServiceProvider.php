@@ -24,18 +24,18 @@ use Flarum\Foundation\AbstractServiceProvider;
 
 class SentraServiceProvider extends AbstractServiceProvider
 {
-  public function register()
-  {
-    $this->container->singleton('ordinaryjellyfish-sentra.modules.post-analysis.attributes', function () {
-      return [
-        Attributes\HarmCategories::class,
-      ];
-    });
+    public function register()
+    {
+        $this->container->singleton('ordinaryjellyfish-sentra.modules.post-analysis.attributes', function () {
+            return [
+                Attributes\HarmCategories::class,
+            ];
+        });
 
-    $this->container->singleton('ordinaryjellyfish-sentra.modules.post-analysis', function () {
-      return [
-        Modules\PostShield::class,
-      ];
-    });
-  }
+        $this->container->singleton('ordinaryjellyfish-sentra.modules.post-analysis', function () {
+            return [
+                Modules\PostShield::class,
+            ];
+        });
+    }
 }

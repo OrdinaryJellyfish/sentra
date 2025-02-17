@@ -26,28 +26,29 @@ use Illuminate\Contracts\Container\Container;
 
 class Modules implements ExtenderInterface
 {
-  private string $moduleType;
-  private array $modules = [];
+    private string $moduleType;
+    private array $modules = [];
 
-  public function __construct(string $moduleType)
-  {
-    $this->moduleType = $moduleType;
-  }
+    public function __construct(string $moduleType)
+    {
+        $this->moduleType = $moduleType;
+    }
 
-  public function add($callback)
-  {
-    $this->modules[] = $callback;
-    return $this;
-  }
+    public function add($callback)
+    {
+        $this->modules[] = $callback;
 
-  function extend(Container $container, Extension $extension = null)
-  {
-    $container->extend('ordinaryjellyfish-sentra.modules.' . $this->moduleType, function ($existingModules) {
-      foreach ($this->modules as $module) {
-        $existingModules[] = $module;
-      }
+        return $this;
+    }
 
-      return $existingModules;
-    });
-  }
+    public function extend(Container $container, Extension $extension = null)
+    {
+        $container->extend('ordinaryjellyfish-sentra.modules.'.$this->moduleType, function ($existingModules) {
+            foreach ($this->modules as $module) {
+                $existingModules[] = $module;
+            }
+
+            return $existingModules;
+        });
+    }
 }

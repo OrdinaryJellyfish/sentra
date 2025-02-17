@@ -25,7 +25,9 @@ use Flarum\User\User;
 
 interface ModuleInterface
 {
-  public function getKey(): string;
-  public function getDependencies(): array;
-  public function handle(array $data, Post $post, User $user);
+    public function getKey(): string;
+
+    public function getDependencies(): array;
+
+    public function handle(array $data, Post $post, User $user);
 }

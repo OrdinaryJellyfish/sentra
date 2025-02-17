@@ -26,28 +26,29 @@ use Illuminate\Contracts\Container\Container;
 
 class Attributes implements ExtenderInterface
 {
-  private string $moduleType;
-  private array $attributes = [];
+    private string $moduleType;
+    private array $attributes = [];
 
-  public function __construct(string $moduleType)
-  {
-    $this->moduleType = $moduleType;
-  }
+    public function __construct(string $moduleType)
+    {
+        $this->moduleType = $moduleType;
+    }
 
-  public function add($attribute)
-  {
-    $this->attributes[] = $attribute;
-    return $this;
-  }
+    public function add($attribute)
+    {
+        $this->attributes[] = $attribute;
 
-  function extend(Container $container, Extension $extension = null)
-  {
-    $container->extend('ordinaryjellyfish-sentra.modules.' . $this->moduleType . '.attributes', function ($existingAttributes) {
-      foreach ($this->attributes as $attribute) {
-        $existingAttributes[] = $attribute;
-      }
+        return $this;
+    }
 
-      return $existingAttributes;
-    });
-  }
+    public function extend(Container $container, Extension $extension = null)
+    {
+        $container->extend('ordinaryjellyfish-sentra.modules.'.$this->moduleType.'.attributes', function ($existingAttributes) {
+            foreach ($this->attributes as $attribute) {
+                $existingAttributes[] = $attribute;
+            }
+
+            return $existingAttributes;
+        });
+    }
 }

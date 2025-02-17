@@ -26,46 +26,48 @@ use Illuminate\Contracts\Container\Container;
 
 class RunPostAnalysisModules
 {
-  private Container $container;
-  private SettingsRepositoryInterface $settings;
+    private Container $container;
+    private SettingsRepositoryInterface $settings;
 
-  public function __construct(Container $container, SettingsRepositoryInterface $settings)
-  {
-    $this->container = $container;
-    $this->settings = $settings;
-  }
-
-  public function handle(Saving $event)
-  {
-    if ($event->actor->hasPermission('ordinaryjellyfish-sentra.bypass'))
-      return;
-
-    $attributes = $this->container->make('ordinaryjellyfish-sentra.modules.post-analysis.attributes');
-    $data = [];
-
-    foreach ($attributes as $attribute) {
-      $attribute = $this->container->make($attribute);
-      $data = array_merge($data, $attribute->handle($event->post, $event->actor));
+    public function __construct(Container $container, SettingsRepositoryInterface $settings)
+    {
+        $this->container = $container;
+        $this->settings = $settings;
     }
 
-    $modules = $this->container->make('ordinaryjellyfish-sentra.modules.post-analysis');
+    public function handle(Saving $event)
+    {
+        if ($event->actor->hasPermission('ordinaryjellyfish-sentra.bypass')) {
+            return;
+        }
 
-    foreach ($modules as $module) {
-      $module = $this->container->make($module);
+        $attributes = $this->container->make('ordinaryjellyfish-sentra.modules.post-analysis.attributes');
+        $data = [];
 
-      if ($this->settings->get('ordinaryjellyfish-sentra.modules.' . $module->getKey() . '.enabled') && $this->areDependenciesEnabled($module->getDependencies())) {
-        $module->handle($data, $event->post, $event->actor);
-      }
+        foreach ($attributes as $attribute) {
+            $attribute = $this->container->make($attribute);
+            $data = array_merge($data, $attribute->handle($event->post, $event->actor));
+        }
+
+        $modules = $this->container->make('ordinaryjellyfish-sentra.modules.post-analysis');
+
+        foreach ($modules as $module) {
+            $module = $this->container->make($module);
+
+            if ($this->settings->get('ordinaryjellyfish-sentra.modules.'.$module->getKey().'.enabled') && $this->areDependenciesEnabled($module->getDependencies())) {
+                $module->handle($data, $event->post, $event->actor);
+            }
+        }
     }
-  }
 
-  private function areDependenciesEnabled(array $dependencies): bool
-  {
-    foreach ($dependencies as $dependency) {
-      if (!$this->settings->get('ordinaryjellyfish-sentra.services.' . $dependency . '.enabled')) {
-        return false;
-      }
+    private function areDependenciesEnabled(array $dependencies): bool
+    {
+        foreach ($dependencies as $dependency) {
+            if (! $this->settings->get('ordinaryjellyfish-sentra.services.'.$dependency.'.enabled')) {
+                return false;
+            }
+        }
+
+        return true;
     }
-    return true;
-  }
 }

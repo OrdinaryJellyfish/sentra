@@ -27,11 +27,11 @@ return [
     (new Extend\ServiceProvider())
         ->register(SentraServiceProvider::class),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js'),
     (new Extend\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js')
-        ->css(__DIR__ . '/less/admin.less'),
-    new Extend\Locales(__DIR__ . '/locale'),
+        ->js(__DIR__.'/js/dist/admin.js')
+        ->css(__DIR__.'/less/admin.less'),
+    new Extend\Locales(__DIR__.'/locale'),
     (new Extend\Event())
         ->listen(Saving::class, Listeners\RunPostAnalysisModules::class),
 ];

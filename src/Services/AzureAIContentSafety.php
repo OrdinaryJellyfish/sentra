@@ -24,53 +24,53 @@ use GuzzleHttp\Client as GuzzleClient;
 
 class AzureAIContentSafety
 {
-  private GuzzleClient $client;
-  private string $outputType = 'FourSeverityLevels';
+    private GuzzleClient $client;
+    private string $outputType = 'FourSeverityLevels';
 
-  public function __construct()
-  {
-    $this->client = new GuzzleClient([
-      'base_uri' => app('flarum.settings')->get('ordinaryjellyfish-sentra.services.content_safety.endpoint') . 'contentsafety/',
-      'query' => [
-        'api-version' => '2024-09-01'
-      ],
-      'headers' => [
-        'Ocp-Apim-Subscription-Key' => app('flarum.settings')->get('ordinaryjellyfish-sentra.services.content_safety.api_key'),
-      ]
-    ]);
-  }
+    public function __construct()
+    {
+        $this->client = new GuzzleClient([
+            'base_uri' => app('flarum.settings')->get('ordinaryjellyfish-sentra.services.content_safety.endpoint').'contentsafety/',
+            'query' => [
+                'api-version' => '2024-09-01'
+            ],
+            'headers' => [
+                'Ocp-Apim-Subscription-Key' => app('flarum.settings')->get('ordinaryjellyfish-sentra.services.content_safety.api_key'),
+            ]
+        ]);
+    }
 
-  public function analyzeText($text)
-  {
-    $response = $this->client->request('POST', 'text%3Aanalyze', [
-      'json' => [
-        'text' => $text,
-        'outputType' => $this->outputType
-      ]
-    ]);
+    public function analyzeText($text)
+    {
+        $response = $this->client->request('POST', 'text%3Aanalyze', [
+            'json' => [
+                'text' => $text,
+                'outputType' => $this->outputType
+            ]
+        ]);
 
-    return json_decode($response->getBody());
-  }
+        return json_decode($response->getBody());
+    }
 
-  public function analyzeImage($image)
-  {
-    $response = $this->client->request('POST', 'image%3Aanalyze', [
-      'json' => [
-        'image' => [
-          'content' => $image
-        ],
-        'outputType' => $this->outputType
-      ]
-    ]);
+    public function analyzeImage($image)
+    {
+        $response = $this->client->request('POST', 'image%3Aanalyze', [
+            'json' => [
+                'image' => [
+                    'content' => $image
+                ],
+                'outputType' => $this->outputType
+            ]
+        ]);
 
-    return json_decode($response->getBody());
-  }
+        return json_decode($response->getBody());
+    }
 
-  public function analyzeImageFromUrl($url)
-  {
-    $client = new GuzzleClient();
-    $base64Image = base64_encode($client->get($url)->getBody());
+    public function analyzeImageFromUrl($url)
+    {
+        $client = new GuzzleClient();
+        $base64Image = base64_encode($client->get($url)->getBody());
 
-    return $this->analyzeImage($base64Image);
-  }
+        return $this->analyzeImage($base64Image);
+    }
 }

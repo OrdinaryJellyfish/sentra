@@ -20,65 +20,65 @@
 
 namespace OrdinaryJellyfish\Sentra\Modules;
 
+use Flarum\Locale\Translator;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\Locale\Translator;
 use Flarum\User\User;
 use OrdinaryJellyfish\Sentra\ModuleUtils;
 
 class PostShield implements ModuleInterface
 {
-  private SettingsRepositoryInterface $settings;
-  private Translator $translator;
-  private ModuleUtils $moduleUtils;
+    private SettingsRepositoryInterface $settings;
+    private Translator $translator;
+    private ModuleUtils $moduleUtils;
 
-  public function __construct(SettingsRepositoryInterface $settings, Translator $translator, ModuleUtils $moduleUtils)
-  {
-    $this->settings = $settings;
-    $this->translator = $translator;
-    $this->moduleUtils = $moduleUtils;
-  }
-
-  public function getKey(): string
-  {
-    return 'post_shield';
-  }
-
-  public function getDependencies(): array
-  {
-    return ['content_safety'];
-  }
-
-  public function handle(array $data, Post $post, User $user)
-  {
-    $harmCategories = ['Hate', 'Sexual', 'SelfHarm', 'Violence'];
-    $enabledHarmCategories = [];
-
-    foreach ($harmCategories as $harmCategory) {
-      if ((bool) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.' . $harmCategory . '.enabled')) {
-        $enabledHarmCategories[] = $harmCategory;
-      }
+    public function __construct(SettingsRepositoryInterface $settings, Translator $translator, ModuleUtils $moduleUtils)
+    {
+        $this->settings = $settings;
+        $this->translator = $translator;
+        $this->moduleUtils = $moduleUtils;
     }
 
-    if (count($enabledHarmCategories) > 0) {
-      $postCategories = $data['harmCategories'];
+    public function getKey(): string
+    {
+        return 'post_shield';
+    }
 
-      $highestSeverity = 0;
-      $flagReason = null;
+    public function getDependencies(): array
+    {
+        return ['content_safety'];
+    }
 
-      foreach ($enabledHarmCategories as $category) {
-        $severity = $postCategories[$category] ?? 0;
-        $threshold = (int) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.' . $category . '.severity');
+    public function handle(array $data, Post $post, User $user)
+    {
+        $harmCategories = ['Hate', 'Sexual', 'SelfHarm', 'Violence'];
+        $enabledHarmCategories = [];
 
-        if ($severity >= $threshold && $severity > $highestSeverity) {
-          $highestSeverity = $severity;
-          $flagReason = $category;
+        foreach ($harmCategories as $harmCategory) {
+            if ((bool) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.'.$harmCategory.'.enabled')) {
+                $enabledHarmCategories[] = $harmCategory;
+            }
         }
-      }
 
-      if ($flagReason) {
-        $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.' . $flagReason));
-      }
+        if (count($enabledHarmCategories) > 0) {
+            $postCategories = $data['harmCategories'];
+
+            $highestSeverity = 0;
+            $flagReason = null;
+
+            foreach ($enabledHarmCategories as $category) {
+                $severity = $postCategories[$category] ?? 0;
+                $threshold = (int) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.'.$category.'.severity');
+
+                if ($severity >= $threshold && $severity > $highestSeverity) {
+                    $highestSeverity = $severity;
+                    $flagReason = $category;
+                }
+            }
+
+            if ($flagReason) {
+                $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$flagReason));
+            }
+        }
     }
-  }
 }
