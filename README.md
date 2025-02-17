@@ -26,3 +26,8 @@ php flarum cache:clear
 - [Packagist](https://packagist.org/packages/ordinaryjellyfish/sentra)
 - [GitHub](https://github.com/OrdinaryJellyfish/sentra)
 - [Discuss](https://discuss.flarum.org/d/PUT_DISCUSS_SLUG_HERE)
+
+## Screenshots
+
+![Flag](https://raw.githubusercontent.com/OrdinaryJellyfish/sentra/main/screenshots/flag.png)
+![Settings](https://raw.githubusercontent.com/OrdinaryJellyfish/sentra/main/screenshots/settings.png)
