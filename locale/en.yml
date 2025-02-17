@@ -25,6 +25,7 @@ ordinaryjellyfish-sentra:
         severity_level_low: Low
         severity_level_medium: Medium
         severity_level_high: High
+        severity_level_unknown: Unknown
 
   lib:
     post_shield:
@@ -39,3 +40,4 @@ ordinaryjellyfish-sentra:
 
   forum:
     flag_reason: Sentra flagged this post for {reason}
+    flag_detail: Post met criteria for {categories} with respective severities of {severities}

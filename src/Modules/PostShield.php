@@ -63,6 +63,7 @@ class PostShield implements ModuleInterface
         if (count($enabledHarmCategories) > 0) {
             $postCategories = $data['harmCategories'];
 
+            $flaggedCategories = [];
             $highestSeverity = 0;
             $flagReason = null;
 
@@ -70,14 +71,43 @@ class PostShield implements ModuleInterface
                 $severity = $postCategories[$category] ?? 0;
                 $threshold = (int) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.'.$category.'.severity');
 
-                if ($severity >= $threshold && $severity > $highestSeverity) {
-                    $highestSeverity = $severity;
-                    $flagReason = $category;
+                if ($severity >= $threshold) {
+                    $flaggedCategories[] = [
+                        'category' => $category,
+                        'severity' => $severity,
+                    ];
+
+                    if ($severity > $highestSeverity) {
+                        $highestSeverity = $severity;
+                        $flagReason = $category;
+                    }
                 }
             }
 
             if ($flagReason) {
-                $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$flagReason));
+                $translatedCategories = array_map(function ($category) {
+                    return $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$category);
+                }, array_column($flaggedCategories, 'category'));
+
+                $translatedSeverities = array_map(function ($severity) {
+                    switch ($severity) {
+                        case 2:
+                            return $this->translator->trans('ordinaryjellyfish-sentra.admin.modules.post_shield_settings.severity_level_low');
+                        case 4:
+                            return $this->translator->trans('ordinaryjellyfish-sentra.admin.modules.post_shield_settings.severity_level_medium');
+                        case 6:
+                            return $this->translator->trans('ordinaryjellyfish-sentra.admin.modules.post_shield_settings.severity_level_high');
+                        default:
+                            return $this->translator->trans('ordinaryjellyfish-sentra.admin.modules.post_shield_settings.severity_level_unknown');
+                    }
+                }, array_column($flaggedCategories, 'severity'));
+
+                $flagDetail = $this->translator->trans('ordinaryjellyfish-sentra.forum.flag_detail', [
+                    'categories' => implode(', ', $translatedCategories),
+                    'severities' => implode(', ', $translatedSeverities)
+                ]);
+
+                $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$flagReason), $flagDetail);
             }
         }
     }

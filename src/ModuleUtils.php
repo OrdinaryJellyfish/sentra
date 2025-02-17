@@ -25,11 +25,11 @@ use Flarum\Post\Post;
 
 class ModuleUtils
 {
-    public function unapproveAndFlag(Post $post, string $type)
+    public function unapproveAndFlag(Post $post, string $type, string $details = null)
     {
         $post->is_approved = false;
 
-        $post->afterSave(function (Post $post) use ($type) {
+        $post->afterSave(function (Post $post) use ($type, $details) {
             $flags = $post->flags();
 
             if ($flags->where('type', 'sentra')->doesntExist()) {
@@ -37,6 +37,7 @@ class ModuleUtils
                 $flag->post_id = $post->id;
                 $flag->type = 'sentra';
                 $flag->reason = $type;
+                $flag->reason_detail = $details;
                 $flag->created_at = time();
                 $flag->save();
             }
