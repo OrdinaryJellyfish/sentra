@@ -1,0 +1,55 @@
+---
+title: Creating a Module
+description: Learn how to extend Sentra with your own custom modules.
+---
+
+Modules are the backbone of Sentra. At their core, they are small pieces of functionality that add run simple automated actions on your forum. One by one, they increase functionality and convenience.
+
+## Making Your Module Known
+
+Modules are added with a standard extender, so you can create your own Flarum extension to add functionality or keep it personal by using your personal forum's `extend.php` file. Modules are scoped to specific types, which is specified when you instatiate the extender.
+
+**Module Types:**
+
+* `post-analysis`: Runs when posts are made.
+
+```php
+// extend.php
+use OrdinaryJellyfish\Sentra\Extend\Modules;
+
+return [
+  (new Modules('post-analysis'))
+    ->add(MyModule::class),
+];
+```
+
+## Writing Your Module
+
+Modules are simple classes that implement the `ModuleInterface`. You will implement three methods:
+
+* `getKey`: The unique key for your module.
+* `getDependencies`: An array of keys for services that your module depends on.
+* `handle`: The method that runs when your module is triggered.
+
+```php
+// MyModule.php
+use OrdinaryJellyfish\Sentra\Modules\ModuleInterface;
+
+class MyModule implements ModuleInterface
+{
+  public class getKey(): string
+  {
+    return 'my-module';
+  }
+
+  public function getDependencies(): array
+  {
+    return [];
+  }
+
+  public function handle(array $data, Post $post, User $user)
+  {
+    // Do something with the data
+  }
+}
+```
