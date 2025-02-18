@@ -20,25 +20,24 @@
 
 namespace OrdinaryJellyfish\Sentra;
 
+use Flarum\Api\Serializer\PostSerializer;
+use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
 use Flarum\Post\Event\Saving;
 use Flarum\User\User;
-use Flarum\Api\Serializer\PostSerializer;
-use Flarum\Api\Serializer\ForumSerializer;
-use Flarum\Api\Serializer\UserSerializer;
 
 return [
     (new Extend\ServiceProvider())
         ->register(SentraServiceProvider::class),
 
     (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js'),
 
     (new Extend\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js')
-        ->css(__DIR__ . '/less/admin.less'),
+        ->js(__DIR__.'/js/dist/admin.js')
+        ->css(__DIR__.'/less/admin.less'),
 
-    new Extend\Locales(__DIR__ . '/locale'),
+    new Extend\Locales(__DIR__.'/locale'),
 
     (new Extend\Model(User::class))
         ->hasMany('warnings', Warning::class, 'user_id'),

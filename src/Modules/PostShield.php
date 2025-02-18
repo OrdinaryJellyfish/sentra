@@ -58,7 +58,7 @@ class PostShield implements ModuleInterface
         $enabledHarmCategories = [];
 
         foreach ($harmCategories as $harmCategory) {
-            if ((bool) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.' . $harmCategory . '.enabled')) {
+            if ((bool) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.'.$harmCategory.'.enabled')) {
                 $enabledHarmCategories[] = $harmCategory;
             }
         }
@@ -72,7 +72,7 @@ class PostShield implements ModuleInterface
 
             foreach ($enabledHarmCategories as $category) {
                 $severity = $postCategories[$category] ?? 0;
-                $threshold = (int) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.' . $category . '.severity');
+                $threshold = (int) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.'.$category.'.severity');
 
                 if ($severity >= $threshold) {
                     $flaggedCategories[] = [
@@ -89,7 +89,7 @@ class PostShield implements ModuleInterface
 
             if ($flagReason) {
                 $translatedCategories = array_map(function ($category) {
-                    return $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.' . $category);
+                    return $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$category);
                 }, array_column($flaggedCategories, 'category'));
 
                 $translatedSeverities = array_map(function ($severity) {
@@ -110,7 +110,7 @@ class PostShield implements ModuleInterface
                     'severities' => implode(', ', $translatedSeverities)
                 ]);
 
-                $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.' . $flagReason), $flagDetail);
+                $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$flagReason), $flagDetail);
                 $this->warnings->warn($post, $flagDetail);
             }
         }
