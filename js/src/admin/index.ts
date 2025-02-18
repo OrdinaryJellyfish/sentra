@@ -17,12 +17,13 @@
  */
 
 import app from 'flarum/admin/app';
-import SettingsPage from './SettingsPage';
+import SettingsPage from './components/SettingsPage';
+import BotConfigPage from './components/BotConfigPage';
 
 app.initializers.add('ordinaryjellyfish/sentra', () => {
   app.extensionData
     .for('ordinaryjellyfish-sentra')
-    .registerPage(SettingsPage)
+    .registerPage(app.data.settings['ordinaryjellyfish-sentra.bot_id'] ? SettingsPage : BotConfigPage)
     .registerPermission(
       {
         icon: 'fas fa-shield-alt',

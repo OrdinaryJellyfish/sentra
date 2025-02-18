@@ -17,14 +17,17 @@
  */
 
 import app from 'flarum/forum/app';
-import addWarningsPage from './addWarningsPage';
-import addFlagReason from './addFlagReason';
-import addWarnControl from './addWarnControl';
+import UserPage from 'flarum/forum/components/UserPage';
+import type {Vnode} from 'mithril'
 
-export { default as extend } from './extend';
+export default class WarningsPage extends UserPage {
+  oninit(vnode: Vnode) {
+    super.oninit(vnode);
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  addWarningsPage();
-  addFlagReason();
-  addWarnControl();
-});
+    this.loadUser(m.route.param('username'));
+  }
+
+  content() {
+    return <p>Hello!</p>;
+  }
+}

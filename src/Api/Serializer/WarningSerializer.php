@@ -30,6 +30,7 @@ class WarningSerializer extends AbstractSerializer
         }
 
         return [
+            'id' => $warning->id,
             'reason' => $warning->reason,
             'active' => $warning->active,
             'createdAt' => $this->formatDate($warning->created_at),

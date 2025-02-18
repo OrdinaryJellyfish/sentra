@@ -28,7 +28,7 @@ class ListWarningsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $userId = Arr::get($request->getQueryParams(), 'id');
+        $userId = Arr::get($request->getQueryParams(), 'user_id');
         $actor = RequestUtil::getActor($request);
         $include = $this->extractInclude($request);
 

@@ -16,15 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { extend } from 'flarum/extend';
+import UserPage from 'flarum/components/UserPage';
+import LinkButton from 'flarum/components/LinkButton';
+import WarningsPage from './components/WarningsPage';
 import app from 'flarum/forum/app';
-import addWarningsPage from './addWarningsPage';
-import addFlagReason from './addFlagReason';
-import addWarnControl from './addWarnControl';
 
-export { default as extend } from './extend';
+export default function () {
+  app.routes['user.warnings'] = {
+    path: '/u/:username/warnings',
+    component: WarningsPage,
+  };
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  addWarningsPage();
-  addFlagReason();
-  addWarnControl();
-});
+  extend(UserPage.prototype, 'navItems', function (items) {
+    if (app.session.user && app.session.user.canViewWarnings()) {
+      items.add(
+        'warnings',
+        LinkButton.component(
+          {
+            href: app.route('user.warnings', { username: this.user.slug() }),
+            icon: 'fas fa-exclamation-triangle',
+          },
+          app.translator.trans('ordinaryjellyfish-sentra.forum.warnings')
+        )
+      )
+    }
+  })
+}

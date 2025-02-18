@@ -17,7 +17,12 @@
  */
 
 import Extend from 'flarum/common/extenders';
+import Post from 'flarum/common/models/Post';
+import User from 'flarum/common/models/User';
+import Warning from './models/Warning';
 
 export default [
-  // Add your forum extenders here
+  new Extend.Store().add('warnings', Warning),
+  new Extend.Model(Post).attribute<boolean>('canWarn'),
+  new Extend.Model(User).attribute<number>('warningCount').attribute<boolean>('canViewWarnings'),
 ];

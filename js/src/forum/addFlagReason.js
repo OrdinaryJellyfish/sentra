@@ -17,14 +17,19 @@
  */
 
 import app from 'flarum/forum/app';
-import addWarningsPage from './addWarningsPage';
-import addFlagReason from './addFlagReason';
-import addWarnControl from './addWarnControl';
+import { override } from 'flarum/extend';
+import Post from 'flarum/forum/components/Post';
 
-export { default as extend } from './extend';
+export default function() {
+  override(Post.prototype, 'flagReason', function (original, flag) {
+    if (flag.type() === 'sentra') {
+      const reason = flag.reason();
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  addWarningsPage();
-  addFlagReason();
-  addWarnControl();
-});
+      return app.translator.trans('ordinaryjellyfish-sentra.forum.flag_reason', {
+        reason,
+      });
+    }
+
+    return original(flag);
+  });
+}

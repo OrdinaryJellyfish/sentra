@@ -2,6 +2,11 @@ ordinaryjellyfish-sentra:
   # For more details on the format
   # Checkout https://docs.flarum.org/2.x/extend/i18n/#appendix-a-standard-key-format
   admin:
+    welcome: Welcome to Sentra!
+    welcome_description: You made a great decision to install Sentra. Let's get started by configuring your bot user.
+    bot_username: Choose a Username
+    bot_username_help: Pick a unique permanent username for your Sentra bot user. Make it really cool and personable to your forum, because it can't be changed and this is what your users will see when Sentra interacts with them!
+    create_bot: Create Your Bot
     api_key: API Key
     endpoint: Endpoint
     enable: Enable
@@ -41,7 +46,10 @@ ordinaryjellyfish-sentra:
       SelfHarm_help: Language related to physical actions intended to purposely hurt, injure, damage one's body or kill oneself.
 
   forum:
+    warnings: Warnings
     flag_reason: Sentra flagged this post for {reason}
     flag_detail: Post met criteria for {categories} with respective severities of {severities}
     warn:
+      title: Warn User
       reason_missing: Please define a reason for the warning.
+      reason_placeholder: Reason for warning (required)

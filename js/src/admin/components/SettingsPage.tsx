@@ -20,11 +20,11 @@ import app from 'flarum/admin/app';
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
-import ContentSafetyModal from './components/ContentSafetyModal';
+import ContentSafetyModal from './ContentSafetyModal';
 import type Mithril from 'mithril';
-import ServiceModal from './components/ServiceModal';
-import PostShieldModal from './components/PostShieldModal';
-import ModuleModal from './components/ModuleModal';
+import ServiceModal from './ServiceModal';
+import PostShieldModal from './PostShieldModal';
+import ModuleModal from './ModuleModal';
 
 export default class SettingsPage extends ExtensionPage {
   content() {

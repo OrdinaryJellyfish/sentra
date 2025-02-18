@@ -16,15 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import app from 'flarum/forum/app';
-import addWarningsPage from './addWarningsPage';
-import addFlagReason from './addFlagReason';
-import addWarnControl from './addWarnControl';
+import Model from 'flarum/common/Model';
+import type Post from 'flarum/common/models/Post';
+import type User from 'flarum/common/models/User';
 
-export { default as extend } from './extend';
+export default class Warning extends Model {
+  reason() {
+    Model.attribute<string>('reason').call(this);
+  }
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  addWarningsPage();
-  addFlagReason();
-  addWarnControl();
-});
+  active() {
+    Model.attribute<boolean>('active').call(this);
+  }
+
+  createdAt() {
+    return Model.attribute('createdAt', Model.transformDate).call(this);
+  }
+
+  post() {
+    return Model.hasOne<Post>('post').call(this);
+  }
+
+  user() {
+    return Model.hasOne<User>('user').call(this);
+  }
+
+  actor() {
+    return Model.hasOne<User>('actor').call(this);
+  }
+}

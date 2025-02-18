@@ -16,15 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { extend } from 'flarum/common/extend';
 import app from 'flarum/forum/app';
-import addWarningsPage from './addWarningsPage';
-import addFlagReason from './addFlagReason';
-import addWarnControl from './addWarnControl';
+import PostControls from 'flarum/forum/utils/PostControls';
+import Button from 'flarum/common/components/Button';
+import WarnUserModal from './components/WarnUserModal';
 
-export { default as extend } from './extend';
+export default function () {
+  extend(PostControls, 'moderationControls', function (items, post) {
+    if (post.isHidden() || post.contentType() !== 'comment' || !post.canWarn()) return;
 
-app.initializers.add('ordinaryjellyfish/sentra', () => {
-  addWarningsPage();
-  addFlagReason();
-  addWarnControl();
-});
+    items.add(
+      'warn',
+      <Button icon="fas fa-exclamation-triangle" onclick={() => app.modal.show(WarnUserModal, { post })}>
+        {app.translator.trans('ordinaryjellyfish-sentra.forum.warn.title')}
+      </Button>
+    );
+  });
+}

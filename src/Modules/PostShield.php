@@ -25,15 +25,18 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use OrdinaryJellyfish\Sentra\ModuleUtils;
+use OrdinaryJellyfish\Sentra\WarningRepository;
 
 class PostShield implements ModuleInterface
 {
+    private WarningRepository $warnings;
     private SettingsRepositoryInterface $settings;
     private Translator $translator;
     private ModuleUtils $moduleUtils;
 
-    public function __construct(SettingsRepositoryInterface $settings, Translator $translator, ModuleUtils $moduleUtils)
+    public function __construct(WarningRepository $warnings, SettingsRepositoryInterface $settings, Translator $translator, ModuleUtils $moduleUtils)
     {
+        $this->warnings = $warnings;
         $this->settings = $settings;
         $this->translator = $translator;
         $this->moduleUtils = $moduleUtils;
@@ -55,7 +58,7 @@ class PostShield implements ModuleInterface
         $enabledHarmCategories = [];
 
         foreach ($harmCategories as $harmCategory) {
-            if ((bool) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.'.$harmCategory.'.enabled')) {
+            if ((bool) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.' . $harmCategory . '.enabled')) {
                 $enabledHarmCategories[] = $harmCategory;
             }
         }
@@ -69,7 +72,7 @@ class PostShield implements ModuleInterface
 
             foreach ($enabledHarmCategories as $category) {
                 $severity = $postCategories[$category] ?? 0;
-                $threshold = (int) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.'.$category.'.severity');
+                $threshold = (int) $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.categories.' . $category . '.severity');
 
                 if ($severity >= $threshold) {
                     $flaggedCategories[] = [
@@ -86,7 +89,7 @@ class PostShield implements ModuleInterface
 
             if ($flagReason) {
                 $translatedCategories = array_map(function ($category) {
-                    return $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$category);
+                    return $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.' . $category);
                 }, array_column($flaggedCategories, 'category'));
 
                 $translatedSeverities = array_map(function ($severity) {
@@ -107,7 +110,8 @@ class PostShield implements ModuleInterface
                     'severities' => implode(', ', $translatedSeverities)
                 ]);
 
-                $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$flagReason), $flagDetail);
+                $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.' . $flagReason), $flagDetail);
+                $this->warnings->warn($post, $flagDetail);
             }
         }
     }
