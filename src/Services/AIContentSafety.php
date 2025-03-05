@@ -20,10 +20,10 @@
 
 namespace OrdinaryJellyfish\Sentra\Services;
 
-use Flarum\Settings\SettingsRepositoryInterface;
-use s9e\TextFormatter\Utils\ParsedDOM;
-use GuzzleHttp\Client as GuzzleClient;
 use Flarum\Post\Post;
+use Flarum\Settings\SettingsRepositoryInterface;
+use GuzzleHttp\Client as GuzzleClient;
+use s9e\TextFormatter\Utils\ParsedDOM;
 
 class AIContentSafety
 {
