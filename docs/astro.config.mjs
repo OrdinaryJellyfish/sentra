@@ -21,10 +21,6 @@ export default defineConfig({
             { label: "Installation", slug: "guides/installation" },
             { label: "Creating a Module", slug: "guides/creating-a-module" },
             {
-              label: "Creating a Service",
-              slug: "guides/creating-a-service",
-            },
-            {
               label: "Adding Settings to the Frontend",
               slug: "guides/adding-settings",
             },

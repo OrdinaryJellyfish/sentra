@@ -25,18 +25,21 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use OrdinaryJellyfish\Sentra\ModuleUtils;
+use OrdinaryJellyfish\Sentra\Services\AIContentSafety;
 
 class PostShield implements ModuleInterface
 {
     private SettingsRepositoryInterface $settings;
     private Translator $translator;
     private ModuleUtils $moduleUtils;
+    private AIContentSafety $contentSafety;
 
-    public function __construct(SettingsRepositoryInterface $settings, Translator $translator, ModuleUtils $moduleUtils)
+    public function __construct(SettingsRepositoryInterface $settings, Translator $translator, ModuleUtils $moduleUtils, AIContentSafety $contentSafety)
     {
         $this->settings = $settings;
         $this->translator = $translator;
         $this->moduleUtils = $moduleUtils;
+        $this->contentSafety = $contentSafety;
     }
 
     public function getDependencies(): array
@@ -44,7 +47,7 @@ class PostShield implements ModuleInterface
         return ['content_safety'];
     }
 
-    public function handle(array $data, Post $post, User $user)
+    public function handle(Post $post, User $user)
     {
         if (! $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.enabled')) {
             return;
@@ -60,7 +63,7 @@ class PostShield implements ModuleInterface
         }
 
         if (count($enabledHarmCategories) > 0) {
-            $postCategories = $data['harmCategories'];
+            $postCategories = $this->contentSafety->analyzePost($post);
 
             $flaggedCategories = [];
             $highestSeverity = 0;

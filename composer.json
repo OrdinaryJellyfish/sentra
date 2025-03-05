@@ -10,7 +10,8 @@
         "flarum/core": "^1.0",
         "flarum/approval": "^1.0",
         "flarum/flags": "^1.0",
-        "guzzlehttp/guzzle": "^7.9"
+        "guzzlehttp/guzzle": "^7.9",
+        "spatie/once": "^3.1"
     },
     "authors": [
         {

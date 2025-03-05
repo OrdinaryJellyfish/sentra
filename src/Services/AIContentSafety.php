@@ -20,45 +20,87 @@
 
 namespace OrdinaryJellyfish\Sentra\Services;
 
-use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\User;
-use OrdinaryJellyfish\Sentra\Azure\AIContentSafety;
 use s9e\TextFormatter\Utils\ParsedDOM;
+use GuzzleHttp\Client as GuzzleClient;
+use Flarum\Post\Post;
 
-class ContentSafety implements ServiceInterface
+class AIContentSafety
 {
     private SettingsRepositoryInterface $settings;
+    private GuzzleClient $client;
+    private string $outputType = 'FourSeverityLevels';
 
     public function __construct(SettingsRepositoryInterface $settings)
     {
         $this->settings = $settings;
+        $this->client = new GuzzleClient([
+            'base_uri' => $this->settings->get('ordinaryjellyfish-sentra.services.content_safety.endpoint').'contentsafety/',
+            'query' => [
+                'api-version' => '2024-09-01'
+            ],
+            'headers' => [
+                'Ocp-Apim-Subscription-Key' => $this->settings->get('ordinaryjellyfish-sentra.services.content_safety.api_key'),
+            ]
+        ]);
     }
 
-    public function getKey(): string
+    public function analyzeText($text)
     {
-        return 'content_safety';
+        return once(function () use ($text) {
+            $response = $this->client->request('POST', 'text%3Aanalyze', [
+                'json' => [
+                    'text' => $text,
+                    'outputType' => $this->outputType
+                ]
+            ]);
+
+            return json_decode($response->getBody());
+        });
     }
 
-    public function handle(Post $post, User $user): array
+    public function analyzeImage($image)
     {
-        $contentSafety = new AIContentSafety();
+        return once(function () use ($image) {
+            $response = $this->client->request('POST', 'image%3Aanalyze', [
+                'json' => [
+                    'image' => [
+                        'content' => $image
+                    ],
+                    'outputType' => $this->outputType
+                ]
+            ]);
+
+            return json_decode($response->getBody());
+        });
+    }
+
+    public function analyzeImageFromUrl($url)
+    {
+        return once(function () use ($url) {
+            $client = new GuzzleClient();
+            $base64Image = base64_encode($client->get($url)->getBody());
+
+            return $this->analyzeImage($base64Image);
+        });
+    }
+
+    public function analyzePost(Post $post)
+    {
         $dom = ParsedDOM::loadXML($post->parsed_content);
-        $analyzedText = $contentSafety->analyzeText($post->content);
+        $analyzedText = $this->analyzeText($post->content);
 
         $mergedCategories = $this->mergeCategoriesAnalysis($analyzedText->categoriesAnalysis);
 
         if ($this->settings->get('ordinaryjellyfish-sentra.services.content_safety.analyze_images')) {
             foreach ($dom->query('//IMG[@src]') as $img) {
                 $image = $img->getAttribute('src');
-                $response = $contentSafety->analyzeImageFromUrl($image);
+                $response = $this->analyzeImageFromUrl($image);
                 $mergedCategories = $this->mergeCategoriesAnalysis($response->categoriesAnalysis, $mergedCategories);
             }
         }
 
-        return [
-            'harmCategories' => $mergedCategories,
-        ];
+        return $mergedCategories;
     }
 
     private function mergeCategoriesAnalysis(array $newAnalysis, array $existingAnalysis = []): array

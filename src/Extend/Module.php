@@ -24,7 +24,7 @@ use Flarum\Extend\ExtenderInterface;
 use Flarum\Extension\Extension;
 use Illuminate\Contracts\Container\Container;
 
-class Modules implements ExtenderInterface
+class Module implements ExtenderInterface
 {
     private string $moduleType;
     private array $modules = [];

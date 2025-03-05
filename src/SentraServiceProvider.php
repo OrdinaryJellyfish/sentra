@@ -26,11 +26,7 @@ class SentraServiceProvider extends AbstractServiceProvider
 {
     public function register()
     {
-        $this->container->singleton('ordinaryjellyfish-sentra.modules.post-analysis.services', function () {
-            return [
-                Services\ContentSafety::class,
-            ];
-        });
+        $this->container->singleton(Services\AIContentSafety::class);
 
         $this->container->singleton('ordinaryjellyfish-sentra.modules.post-analysis', function () {
             return [

@@ -27,5 +27,5 @@ interface ModuleInterface
 {
     public function getDependencies(): array;
 
-    public function handle(array $data, Post $post, User $user);
+    public function handle(Post $post, User $user);
 }
