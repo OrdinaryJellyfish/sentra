@@ -18,11 +18,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OrdinaryJellyfish\Sentra\Services;
+namespace OrdinaryJellyfish\Sentra\Azure;
 
 use GuzzleHttp\Client as GuzzleClient;
 
-class AzureAIContentSafety
+class AIContentSafety
 {
     private GuzzleClient $client;
     private string $outputType = 'FourSeverityLevels';

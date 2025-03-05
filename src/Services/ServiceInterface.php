@@ -18,14 +18,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OrdinaryJellyfish\Sentra\Modules;
+namespace OrdinaryJellyfish\Sentra\Services;
 
 use Flarum\Post\Post;
 use Flarum\User\User;
 
-interface ModuleInterface
+interface ServiceInterface
 {
-    public function getDependencies(): array;
+  public function getKey(): string;
 
-    public function handle(array $data, Post $post, User $user);
+  public function handle(Post $post, User $user): array;
 }

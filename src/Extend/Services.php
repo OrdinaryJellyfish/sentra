@@ -24,7 +24,7 @@ use Flarum\Extend\ExtenderInterface;
 use Flarum\Extension\Extension;
 use Illuminate\Contracts\Container\Container;
 
-class Attributes implements ExtenderInterface
+class Services implements ExtenderInterface
 {
     private string $moduleType;
     private array $attributes = [];
@@ -43,7 +43,7 @@ class Attributes implements ExtenderInterface
 
     public function extend(Container $container, Extension $extension = null)
     {
-        $container->extend('ordinaryjellyfish-sentra.modules.'.$this->moduleType.'.attributes', function ($existingAttributes) {
+        $container->extend('ordinaryjellyfish-sentra.modules.'.$this->moduleType.'.services', function ($existingAttributes) {
             foreach ($this->attributes as $attribute) {
                 $existingAttributes[] = $attribute;
             }

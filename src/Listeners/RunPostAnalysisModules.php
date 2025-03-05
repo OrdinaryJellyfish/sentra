@@ -41,12 +41,14 @@ class RunPostAnalysisModules
             return;
         }
 
-        $attributes = $this->container->make('ordinaryjellyfish-sentra.modules.post-analysis.attributes');
+        $services = $this->container->make('ordinaryjellyfish-sentra.modules.post-analysis.services');
         $data = [];
 
-        foreach ($attributes as $attribute) {
-            $attribute = $this->container->make($attribute);
-            $data = array_merge($data, $attribute->handle($event->post, $event->actor));
+        foreach ($services as $service) {
+            $service = $this->container->make($service);
+            if ($this->settings->get('ordinaryjellyfish-sentra.services.'.$service->getKey().'.enabled')) {
+                $data = array_merge($data, $service->handle($event->post, $event->actor));
+            }
         }
 
         $modules = $this->container->make('ordinaryjellyfish-sentra.modules.post-analysis');
@@ -54,7 +56,7 @@ class RunPostAnalysisModules
         foreach ($modules as $module) {
             $module = $this->container->make($module);
 
-            if ($this->settings->get('ordinaryjellyfish-sentra.modules.'.$module->getKey().'.enabled') && $this->areDependenciesEnabled($module->getDependencies())) {
+            if ($this->areDependenciesEnabled($module->getDependencies())) {
                 $module->handle($data, $event->post, $event->actor);
             }
         }

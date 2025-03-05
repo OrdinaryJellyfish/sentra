@@ -39,11 +39,6 @@ class PostShield implements ModuleInterface
         $this->moduleUtils = $moduleUtils;
     }
 
-    public function getKey(): string
-    {
-        return 'post_shield';
-    }
-
     public function getDependencies(): array
     {
         return ['content_safety'];
@@ -51,6 +46,10 @@ class PostShield implements ModuleInterface
 
     public function handle(array $data, Post $post, User $user)
     {
+        if (! $this->settings->get('ordinaryjellyfish-sentra.modules.post_shield.enabled')) {
+            return;
+        }
+
         $harmCategories = ['Hate', 'Sexual', 'SelfHarm', 'Violence'];
         $enabledHarmCategories = [];
 

@@ -18,14 +18,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OrdinaryJellyfish\Sentra\Attributes;
+namespace OrdinaryJellyfish\Sentra\Services;
 
 use Flarum\Post\Post;
+use Flarum\User\User;
 use Flarum\Settings\SettingsRepositoryInterface;
-use OrdinaryJellyfish\Sentra\Services;
+use OrdinaryJellyfish\Sentra\Azure\AIContentSafety;
 use s9e\TextFormatter\Utils\ParsedDOM;
 
-class HarmCategories
+class ContentSafety implements ServiceInterface
 {
     private SettingsRepositoryInterface $settings;
 
@@ -34,9 +35,14 @@ class HarmCategories
         $this->settings = $settings;
     }
 
-    public function handle(Post $post)
+    public function getKey(): string
     {
-        $contentSafety = new Services\AzureAIContentSafety();
+        return 'content_safety';
+    }
+
+    public function handle(Post $post, User $user): array
+    {
+        $contentSafety = new AIContentSafety();
         $dom = ParsedDOM::loadXML($post->parsed_content);
         $analyzedText = $contentSafety->analyzeText($post->content);
 
