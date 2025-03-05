@@ -25,7 +25,7 @@ use Flarum\User\User;
 
 interface ServiceInterface
 {
-  public function getKey(): string;
+    public function getKey(): string;
 
-  public function handle(Post $post, User $user): array;
+    public function handle(Post $post, User $user): array;
 }

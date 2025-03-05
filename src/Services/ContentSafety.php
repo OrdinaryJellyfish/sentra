@@ -21,8 +21,8 @@
 namespace OrdinaryJellyfish\Sentra\Services;
 
 use Flarum\Post\Post;
-use Flarum\User\User;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\User;
 use OrdinaryJellyfish\Sentra\Azure\AIContentSafety;
 use s9e\TextFormatter\Utils\ParsedDOM;
 
