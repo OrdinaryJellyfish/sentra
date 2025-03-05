@@ -58,8 +58,8 @@ export default class ServiceModal extends SettingsModal {
 
   apiKeyField() {
     return (
-      <div>
-        <label className="sentra-form-label" for={`${this.key}_apiKey`}>
+      <>
+        <label for={`${this.key}_apiKey`}>
           {app.translator.trans('ordinaryjellyfish-sentra.admin.api_key')}
         </label>
         <input
@@ -69,14 +69,14 @@ export default class ServiceModal extends SettingsModal {
           id={`${this.key}_apiKey`}
           bidi={this.setting(`ordinaryjellyfish-sentra.services.${this.key}.api_key`)}
         />
-      </div>
+      </>
     );
   }
 
   endpointField() {
     return (
-      <div>
-        <label className="sentra-form-label" for={`${this.key}_endpoint`}>
+      <>
+        <label for={`${this.key}_endpoint`}>
           {app.translator.trans('ordinaryjellyfish-sentra.admin.endpoint')}
         </label>
         <input
@@ -86,7 +86,7 @@ export default class ServiceModal extends SettingsModal {
           id={`${this.key}_endpoint`}
           bidi={this.setting(`ordinaryjellyfish-sentra.services.${this.key}.endpoint`)}
         />
-      </div>
+      </>
     );
   }
 
