@@ -14,13 +14,25 @@ module.exports = require('flarum-webpack-config')({
 });
 ```
 
+For typings, add the extension to your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@ordinaryjellyfish-sentra": ["../vendor/ordinaryjellyfish/sentra/js/dist-typings/admin/index.d.ts"]
+    }
+  }
+}
+```
+
 Then you'll need to extend the settings page:
 
 ```ts
 // src/admin/index.ts
 import app from 'flarum/admin/app';
 import { extend } from 'flarum/common/extend';
-// Your IDE may throw an error with this import, this can be safely ignored
+// If your IDE throws an error with this import, make sure you added the Sentra typings to your tsconfig
 import { SettingsPage } from '@ordinaryjellyfish-sentra';
 
 app.initializers.add('your/extension', () => {
