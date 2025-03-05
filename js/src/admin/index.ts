@@ -18,6 +18,8 @@
 
 import app from 'flarum/admin/app';
 import SettingsPage from './SettingsPage';
+import ModuleModal from './components/ModuleModal';
+import ServiceModal from './components/ServiceModal';
 
 app.initializers.add('ordinaryjellyfish/sentra', () => {
   app.extensionData
@@ -32,3 +34,5 @@ app.initializers.add('ordinaryjellyfish/sentra', () => {
       'moderate'
     );
 });
+
+export { SettingsPage, ModuleModal, ServiceModal };
