@@ -26,6 +26,15 @@ export default defineConfig({
             },
           ],
         },
+        {
+          label: "Modules",
+          items: [
+            {
+              label: "Identity Sentinel",
+              slug: "modules/identity-sentinel",
+            },
+          ],
+        },
       ],
     }),
   ],
