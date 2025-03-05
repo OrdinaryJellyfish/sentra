@@ -1,0 +1,17 @@
+.WarningList {
+  border-collapse: collapse;
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: @control-bg;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) td {
+    background: var(--body-bg-shaded);
+  }
+}

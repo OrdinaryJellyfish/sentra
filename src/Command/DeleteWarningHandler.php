@@ -35,9 +35,8 @@ class DeleteWarningHandler
     {
         $modelId = $command->modelId;
         $actor = $command->actor;
-        $data = $command->data;
 
-        $actor->assertCan('viewWarnings');
+        $actor->assertCan('deleteWarnings');
 
         $warning = $this->warnings->findOrFail($modelId);
 

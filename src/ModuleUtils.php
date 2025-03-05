@@ -39,23 +39,9 @@ class ModuleUtils
                 $flag->type = 'sentra';
                 $flag->reason = $type;
                 $flag->reason_detail = $details;
-                $flag->created_at = time();
+                $flag->created_at = Carbon::now();
                 $flag->save();
             }
-        });
-    }
-
-    public function warn(Post $post, string $reason)
-    {
-        $post->afterSave(function (Post $post) use ($reason) {
-            $warning = new Warning();
-            $warning->user_id = $post->user_id;
-            $warning->post_id = $post->id;
-            $warning->actor_id = app('flarum.settings')->get('ordinaryjellyfish-sentra.bot_id');
-            $warning->reason = $reason;
-            $warning->created_at = Carbon::now();
-
-            $warning->save();
         });
     }
 }

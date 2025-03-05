@@ -31,7 +31,8 @@ return [
         ->register(SentraServiceProvider::class),
 
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->css(__DIR__.'/less/forum.less'),
 
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js')
@@ -48,12 +49,7 @@ return [
         }),
 
     (new Extend\ApiSerializer(UserSerializer::class))
-        ->attribute('warningCount', function (UserSerializer $serializer, User $user) {
-            return Warning::where('user_id', $user->id)->where('active', true)->count();
-        })
-        ->attribute('canViewWarnings', function (UserSerializer $serializer, User $user) {
-            return $serializer->getActor()->hasPermission('ordinaryjellyfish-sentra.view_warnings');
-        }),
+        ->attributes(Api\AddUserAttributes::class),
 
     (new Extend\ModelVisibility(Warning::class))
         ->scope(Access\ScopeWarningVisibility::class),

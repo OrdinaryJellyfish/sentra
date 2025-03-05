@@ -71,6 +71,8 @@ class CreateWarningHandler
         $warning->post_id = $post->id;
         $warning->actor_id = $actor->id;
         $warning->reason = Arr::get($data, 'attributes.reason');
+        $warning->severity = Arr::get($data, 'attributes.severity', 1);
+        $warning->expires_at = Arr::get($data, 'attributes.expiresAt', null);
         $warning->created_at = Carbon::now();
 
         $warning->save();

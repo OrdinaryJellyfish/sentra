@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import app from 'flarum/forum/app';
 import UserPage from 'flarum/forum/components/UserPage';
+import WarningList from './WarningList';
 import type {Vnode} from 'mithril'
 
 export default class WarningsPage extends UserPage {
@@ -28,6 +28,6 @@ export default class WarningsPage extends UserPage {
   }
 
   content() {
-    return <p>Hello!</p>;
+    return <WarningList user={this.user} />
   }
 }

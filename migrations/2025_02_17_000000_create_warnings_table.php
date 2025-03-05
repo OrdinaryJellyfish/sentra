@@ -28,8 +28,9 @@ return Migration::createTable(
         $table->integer('post_id')->unsigned();
         $table->integer('user_id')->unsigned();
         $table->integer('actor_id')->unsigned();
+        $table->enum('severity', [1, 2, 3]);
         $table->string('reason');
-        $table->boolean('active')->default(true);
+        $table->timestamp('expires_at')->nullable();
         $table->timestamps();
 
         $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');

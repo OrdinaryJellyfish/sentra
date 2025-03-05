@@ -24,5 +24,9 @@ import Warning from './models/Warning';
 export default [
   new Extend.Store().add('warnings', Warning),
   new Extend.Model(Post).attribute<boolean>('canWarn'),
-  new Extend.Model(User).attribute<number>('warningCount').attribute<boolean>('canViewWarnings'),
+  new Extend.Model(User)
+    .attribute<number>('warningCount')
+    .attribute<boolean>('canViewOwnWarnings')
+    .attribute<boolean>('canViewWarnings')
+    .attribute<boolean>('canDeleteWarnings'),
 ];

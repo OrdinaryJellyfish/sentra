@@ -12,8 +12,10 @@ ordinaryjellyfish-sentra:
     enable: Enable
     permissions:
       bypass: Bypass Sentra
-      create_warnings: Create Warnings
-      view_warnings: View Warnings
+      view_own_warnings: View own warnings
+      create_warnings: Create warnings
+      view_warnings: View warnings
+      delete_warnings: Delete warnings
     services:
       heading: Services
       content_safety: Azure AI Content Safety
@@ -29,10 +31,10 @@ ordinaryjellyfish-sentra:
       post_shield_settings:
         harm_categories: Harm Categories
         severity_level: Severity Trigger Level
-        severity_level_low: Low
-        severity_level_medium: Medium
-        severity_level_high: High
-        severity_level_unknown: Unknown
+        severity_level_low: => ordinaryjellyfish-sentra.ref.low
+        severity_level_medium: => ordinaryjellyfish-sentra.ref.medium
+        severity_level_high: => ordinaryjellyfish-sentra.ref.high
+        severity_level_unknown: => ordinaryjellyfish-sentra.ref.unknown
 
   lib:
     post_shield:
@@ -52,4 +54,25 @@ ordinaryjellyfish-sentra:
     warn:
       title: Warn User
       reason_missing: Please define a reason for the warning.
-      reason_placeholder: Reason for warning (required)
+      reason: => ordinaryjellyfish-sentra.ref.reason
+      expires_at: Expires at (optional)
+      severity: => ordinaryjellyfish-sentra.ref.severity
+      severity_low: => ordinaryjellyfish-sentra.ref.low
+      severity_medium: => ordinaryjellyfish-sentra.ref.medium
+      severity_high: => ordinaryjellyfish-sentra.ref.high
+    warning_page:
+      empty_text: Looks like this user has a stellar record. Keep it up!
+      issued_by: Issued By
+      severity: => ordinaryjellyfish-sentra.ref.severity
+      reason: => ordinaryjellyfish-sentra.ref.reason
+      created: Created
+      expires: Expires
+      no_expiry: Does not expire
+  
+  ref:
+    low: Low
+    medium: Medium
+    high: High
+    unknown: Unknown
+    severity: Severity
+    reason: Reason

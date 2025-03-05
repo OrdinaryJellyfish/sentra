@@ -47,5 +47,13 @@ app.initializers.add('ordinaryjellyfish/sentra', () => {
         permission: 'ordinaryjellyfish-sentra.view_warnings',
       },
       'moderate'
-    );
+    )
+    .registerPermission(
+      {
+        icon: 'fas fa-shield-alt',
+        label: app.translator.trans('ordinaryjellyfish-sentra.admin.permissions.delete_warnings'),
+        permission: 'ordinaryjellyfish-sentra.delete_warnings',
+      },
+      'moderate'
+    )
 });

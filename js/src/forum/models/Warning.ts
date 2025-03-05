@@ -17,31 +17,15 @@
  */
 
 import Model from 'flarum/common/Model';
-import type Post from 'flarum/common/models/Post';
+import Post from 'flarum/common/models/Post';
 import type User from 'flarum/common/models/User';
 
 export default class Warning extends Model {
-  reason() {
-    Model.attribute<string>('reason').call(this);
-  }
-
-  active() {
-    Model.attribute<boolean>('active').call(this);
-  }
-
-  createdAt() {
-    return Model.attribute('createdAt', Model.transformDate).call(this);
-  }
-
-  post() {
-    return Model.hasOne<Post>('post').call(this);
-  }
-
-  user() {
-    return Model.hasOne<User>('user').call(this);
-  }
-
-  actor() {
-    return Model.hasOne<User>('actor').call(this);
-  }
+  reason = Model.attribute<string>('reason');
+  severity = Model.attribute<number>('severity');
+  expiresAt = Model.attribute('expiresAt', Model.transformDate);
+  createdAt = Model.attribute('createdAt', Model.transformDate);
+  post = Model.hasOne<Post>('post');
+  user = Model.hasOne<User>('user');
+  actor = Model.hasOne<User>('actor');
 }

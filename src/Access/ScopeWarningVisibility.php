@@ -28,12 +28,12 @@ class ScopeWarningVisibility
     public function __invoke(User $actor, Builder $query): void
     {
         $query->where(function (Builder $query) use ($actor) {
-            if ($actor->hasPermission('ordinaryjellyfish-sentra.view_warnings')) {
-                $query->whereHas('post', function (Builder $query) use ($actor) {
-                    $query->whereVisibleTo($actor);
-                });
-            } else {
-                $query->whereRaw('1 = 0');
+            $query->whereHas('post', function (Builder $query) use ($actor) {
+                $query->whereVisibleTo($actor);
+            });
+
+            if (!$actor->hasPermission('ordinaryjellyfish-sentra.view_warnings')) {
+                $query->where('user_id', $actor->id);
             }
         });
     }

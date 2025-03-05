@@ -29,17 +29,13 @@ export default function () {
   };
 
   extend(UserPage.prototype, 'navItems', function (items) {
-    if (app.session.user && app.session.user.canViewWarnings()) {
+    if (app.session.user && (app.session.user.canViewWarnings() || app.session.user.id() === this.user.id())) {
       items.add(
         'warnings',
-        LinkButton.component(
-          {
-            href: app.route('user.warnings', { username: this.user.slug() }),
-            icon: 'fas fa-exclamation-triangle',
-          },
-          app.translator.trans('ordinaryjellyfish-sentra.forum.warnings')
-        )
-      )
+        <LinkButton href={app.route('user.warnings', { username: this.user.slug() })} icon="fas fa-exclamation-triangle">
+          {app.translator.trans('ordinaryjellyfish-sentra.forum.warnings')} <span className="Button-badge">{this.user.warningCount()}</span>
+        </LinkButton>
+      );
     }
-  })
+  });
 }

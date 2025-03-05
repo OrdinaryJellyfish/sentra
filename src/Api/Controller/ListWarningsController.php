@@ -48,9 +48,12 @@ class ListWarningsController extends AbstractListController
     {
         $userId = Arr::get($request->getQueryParams(), 'user_id');
         $actor = RequestUtil::getActor($request);
-        $include = $this->extractInclude($request);
 
         $actor->assertRegistered();
+
+        $limit = $this->extractLimit($request);
+        $offset = $this->extractOffset($request);
+        $include = $this->extractInclude($request);
 
         $warnings = Warning::whereVisibleTo($actor)
             ->latest('warnings.created_at')

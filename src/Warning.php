@@ -27,12 +27,20 @@ use Flarum\Post\Post;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+enum Severity: int
+{
+    case LOW = 1;
+    case MEDIUM = 2;
+    case HIGH = 3;
+}
+
 /**
  * @property int $post_id
  * @property int $user_id
  * @property int $actor_id
  * @property string $reason
- * @property bool $active
+ * @property Severity $severity
+ * @property Carbon $expires_at
  * @property Carbon $created_at
  *
  * @property-read Post $post
@@ -45,7 +53,7 @@ class Warning extends AbstractModel
 
     protected $table = 'warnings';
 
-    protected $dates = ['created_at'];
+    protected $dates = ['expires_at', 'created_at'];
 
     public function post(): BelongsTo
     {

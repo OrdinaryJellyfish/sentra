@@ -19,15 +19,17 @@
 import app from 'flarum/forum/app';
 import Modal from 'flarum/common/components/Modal';
 import Button from 'flarum/common/components/Button';
+import Select from 'flarum/common/components/Select';
 import Stream from 'flarum/common/utils/Stream';
 import withAttr from 'flarum/common/utils/withAttr';
-import ItemList from 'flarum/common/utils/ItemList';
 
 export default class WarnUserModal extends Modal {
   oninit(vnode) {
     super.oninit(vnode);
 
     this.reason = Stream('');
+    this.severity = Stream(1);
+    this.expiresAt = Stream(undefined);
   }
 
   className() {
@@ -43,12 +45,30 @@ export default class WarnUserModal extends Modal {
       <div className="Modal-body">
         <div className="Form Form--centered">
           <div className="Form-group">
-            <textarea
+            <label for="reason">{app.translator.trans('ordinaryjellyfish-sentra.forum.warn.reason')}</label>
+            <textarea className="FormControl" value={this.reason()} oninput={withAttr('value', this.reason)} id="reason" required />
+          </div>
+          <div className="Form-group">
+            <label for="severity">{app.translator.trans('ordinaryjellyfish-sentra.forum.warn.severity')}</label>
+            <Select
+              options={{
+                1: app.translator.trans('ordinaryjellyfish-sentra.forum.warn.severity_low'),
+                2: app.translator.trans('ordinaryjellyfish-sentra.forum.warn.severity_medium'),
+                3: app.translator.trans('ordinaryjellyfish-sentra.forum.warn.severity_high'),
+              }}
+              value={this.severity()}
+              onchange={this.severity}
+            />
+          </div>
+          <div className="Form-group">
+            <label for="expiry">{app.translator.trans('ordinaryjellyfish-sentra.forum.warn.expires_at')}</label>
+            <input
+              type="date"
+              id="expiry"
               className="FormControl"
-              placeholder={app.translator.trans('ordinaryjellyfish-sentra.forum.warn.reason_placeholder')}
-              value={this.reason()}
-              oninput={withAttr('value', this.reason)}
-              required
+              min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
+              value={this.expiresAt()}
+              oninput={withAttr('value', this.expiresAt)}
             />
           </div>
           <div className="Form-group">
@@ -71,6 +91,8 @@ export default class WarnUserModal extends Modal {
       .save(
         {
           reason: this.reason(),
+          severity: this.severity(),
+          expiresAt: this.expiresAt(),
           relationships: {
             user: this.attrs.post.data.relationships.user,
             actor: app.session.user,

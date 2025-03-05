@@ -20,12 +20,14 @@
 
 namespace OrdinaryJellyfish\Sentra\Modules;
 
+use Carbon\Carbon;
 use Flarum\Locale\Translator;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use OrdinaryJellyfish\Sentra\ModuleUtils;
 use OrdinaryJellyfish\Sentra\WarningRepository;
+use OrdinaryJellyfish\Sentra\Severity;
 
 class PostShield implements ModuleInterface
 {
@@ -111,7 +113,19 @@ class PostShield implements ModuleInterface
                 ]);
 
                 $this->moduleUtils->unapproveAndFlag($post, $this->translator->trans('ordinaryjellyfish-sentra.lib.post_shield.'.$flagReason), $flagDetail);
-                $this->warnings->warn($post, $flagDetail);
+
+                $warningSeverity = match ($highestSeverity) {
+                    2 => Severity::LOW,
+                    4 => Severity::MEDIUM,
+                    6 => Severity::HIGH,
+                    default => Severity::LOW,
+                };
+
+                $this->warnings->warn($post, [
+                    'reason' => $flagDetail,
+                    'severity' => $warningSeverity->value,
+                    'expires_at' => Carbon::now()->addDays(14),
+                ]);
             }
         }
     }
