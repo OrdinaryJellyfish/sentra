@@ -21,8 +21,8 @@ export default defineConfig({
             { label: "Installation", slug: "guides/installation" },
             { label: "Creating a Module", slug: "guides/creating-a-module" },
             {
-              label: "Creating an Attribute",
-              slug: "guides/creating-an-attribute",
+              label: "Creating a Service",
+              slug: "guides/creating-a-service",
             },
           ],
         },
