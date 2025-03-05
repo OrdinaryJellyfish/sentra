@@ -36,7 +36,7 @@ export default class SettingsPage extends ExtensionPage {
             .toArray()
             .map(({ label, modal }) => {
               return (
-                <Button className="Button" onclick={() => app.modal.show(modal)}>
+                <Button className="Button sentra-button" onclick={() => app.modal.show(modal)}>
                   {label}
                 </Button>
               );
@@ -46,7 +46,7 @@ export default class SettingsPage extends ExtensionPage {
             .toArray()
             .map(({ label, modal }) => {
               return (
-                <Button className="Button" onclick={() => app.modal.show(modal)}>
+                <Button className="Button sentra-button" onclick={() => app.modal.show(modal)}>
                   {label}
                 </Button>
               );
