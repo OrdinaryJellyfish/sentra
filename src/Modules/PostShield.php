@@ -26,8 +26,8 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use OrdinaryJellyfish\Sentra\ModuleUtils;
-use OrdinaryJellyfish\Sentra\WarningRepository;
 use OrdinaryJellyfish\Sentra\Severity;
+use OrdinaryJellyfish\Sentra\WarningRepository;
 
 class PostShield implements ModuleInterface
 {

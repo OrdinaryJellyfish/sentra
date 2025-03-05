@@ -32,7 +32,7 @@ class ScopeWarningVisibility
                 $query->whereVisibleTo($actor);
             });
 
-            if (!$actor->hasPermission('ordinaryjellyfish-sentra.view_warnings')) {
+            if (! $actor->hasPermission('ordinaryjellyfish-sentra.view_warnings')) {
                 $query->where('user_id', $actor->id);
             }
         });

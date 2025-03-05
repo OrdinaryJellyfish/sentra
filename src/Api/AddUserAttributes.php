@@ -21,10 +21,10 @@
 namespace OrdinaryJellyfish\Sentra\Api;
 
 use Carbon\Carbon;
-use OrdinaryJellyfish\Sentra\Warning;
 use Flarum\Api\Serializer\BasicUserSerializer;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
+use OrdinaryJellyfish\Sentra\Warning;
 
 class AddUserAttributes
 {
