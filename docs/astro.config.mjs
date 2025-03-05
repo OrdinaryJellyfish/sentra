@@ -24,6 +24,10 @@ export default defineConfig({
               label: "Creating a Service",
               slug: "guides/creating-a-service",
             },
+            {
+              label: "Adding Settings to the Frontend",
+              slug: "guides/adding-settings",
+            },
           ],
         },
       ],

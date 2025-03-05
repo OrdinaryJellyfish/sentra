@@ -1,0 +1,107 @@
+---
+title: Adding Settings to the Frontend
+description: Learn how to extend the settings page to add configuration for your modules and services.
+---
+
+If your module requires settings, you can add a settings page to the frontend. This is done by extending the `SettingsPage` class in your admin JavaScript.
+
+First, you'll need to import the extension in your webpack config:
+
+```js
+// webpack.config.js
+module.exports = require('flarum-webpack-config')({
+    useExtensions: ['ordinaryjellyfish-sentra']
+});
+```
+
+Then you'll need to extend the settings page:
+
+```ts
+// src/admin/index.ts
+import app from 'flarum/admin/app';
+import { extend } from 'flarum/common/extend';
+// Your IDE may throw an error with this import, this can be safely ignored
+import { SettingsPage } from '@ordinaryjellyfish-sentra';
+
+app.initializers.add('your/extension', () => {
+  // For services
+  extend(SettingsPage.prototype, 'serviceItems', function (items) {
+    items.add('my_service', {
+      label: 'My Service',
+      modal: MyServiceSettingsModal
+    })
+  });
+
+  // For modules
+  extend(SettingsPage.prototype, 'moduleItems', function (items) {
+    items.add('my_module', {
+      label: 'My Module',
+      modal: MyModuleSettingsModal
+    })
+  });
+});
+```
+
+## Service Settings
+
+To add settings for a service, you'll create a modal component:
+
+```tsx
+// components/MyServiceSettingsModal.tsx
+import { ServiceModal } from '@ordinaryjellyfish-sentra';
+
+export default class MyServiceSettingsModal extends ServiceModal {
+  key = 'my_service';
+
+  title() {
+    return 'My Service';
+  }
+
+  helpText() {
+    return 'This is a service that does something cool.';
+  }
+
+  form() {
+    // The enable switch is automatically included, no need to add one into the array
+    return [
+      // A generic field to set an API key
+      this.apiKeyField(),
+      // A field to set the endpoint, common with Azure services
+      this.endpointField()
+    ]
+  }
+}
+```
+
+## Module Settings
+
+Module settings are structured similarly to service settings, in a modal:
+
+```tsx
+// components/MyModuleSettingsModal.tsx
+import { ModuleModal } from '@ordinaryjellyfish-sentra';
+
+export default class MyModuleSettingsModal extends ModuleModal {
+  key = 'my_module';
+
+  // An array of service keys that this module depends on
+  dependencies() {
+    return [];
+  }
+
+  title() {
+    return 'My Module';
+  }
+
+  helpText() {
+    return 'This is a module that does something cool.';
+  }
+
+  form() {
+    // An enable switch is also automatically included here
+    return [
+      <p>Hello, world!</p>
+    ];
+  }
+}
+```
