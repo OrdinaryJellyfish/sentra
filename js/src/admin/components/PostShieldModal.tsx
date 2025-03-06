@@ -22,7 +22,6 @@ import Select from 'flarum/common/components/Select';
 
 export default class PostShieldModal extends ModuleModal {
   key = 'post_shield';
-  docUrl = 'https://sentra.ordinaryjellyfish.xyz';
 
   dependencies() {
     return ['content_safety'];
