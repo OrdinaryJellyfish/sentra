@@ -23,6 +23,7 @@ import Switch from 'flarum/common/components/Switch';
 export default class ServiceModal extends SettingsModal {
   static isDismissible = true;
   key = '';
+  docUrl: string | null = null;
 
   className() {
     return 'Modal--large';
@@ -43,6 +44,11 @@ export default class ServiceModal extends SettingsModal {
     return (
       <div className="Modal-body">
         <p className="helpText">{this.helpText()}</p>
+        {this.docUrl && (
+          <a className="Button Button--primary" style="margin-bottom:10px" icon="fas fa-book" href={this.docUrl} external={true} target="_blank">
+            {app.translator.trans('ordinaryjellyfish-sentra.admin.view_documentation')}
+          </a>
+        )}
         <div className="Form">
           <div className="Form-group">
             <Switch state={!!value && value !== '0'} onchange={this.settings[setting]}>

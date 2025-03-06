@@ -41,9 +41,41 @@ class MyModule implements ModuleInterface
     return [];
   }
 
-  public function handle(array $data, Post $post, User $user)
+  public function handle(Post $post, User $user)
   {
     // Do something with the data
+  }
+}
+```
+
+## Module Actions
+
+### Flagging a Post
+
+To flag a post within your module, use the `ModuleUtils` class:
+
+```php
+// MyModule.php
+use OrdinaryJellyfish\Sentra\ModuleUtils;
+use OrdinaryJellyfish\Sentra\Modules\ModuleInterface;
+
+class MyModule implements ModuleInterface
+{
+  private ModuleUtils $utils;
+
+  public function __construct(ModuleUtils $utils)
+  {
+    $this->utils = $utils;
+  }
+
+  public function getDependencies(): array
+  {
+    return [];
+  }
+
+  public function handle(Post $post, User $user)
+  {
+    $this->utils->unapproveAndFlag($post, 'Short Reason', 'Optional Details');
   }
 }
 ```
